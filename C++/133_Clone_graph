@@ -1,0 +1,32 @@
+class Solution {
+public:
+    map<Node*, Node*> mp;
+
+    void DFS(Node* node) {
+        // Traverse neighbors
+        for (auto e : node->neighbors) {
+            
+            // If not cloned yet
+            if (mp.find(e) == mp.end()) {
+                Node* clone = new Node(e->val);
+                mp[e] = clone;
+                DFS(e); // recurse
+            }
+
+            // Connect current clone to neighbor clone
+            mp[node]->neighbors.push_back(mp[e]);
+        }
+    }
+
+    Node* cloneGraph(Node* node) {
+        if (!node) return NULL;
+
+        // Create first node
+        Node* clone = new Node(node->val);
+        mp[node] = clone;
+
+        DFS(node);
+
+        return clone;
+    }
+};
